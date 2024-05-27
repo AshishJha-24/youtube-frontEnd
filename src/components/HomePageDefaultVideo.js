@@ -6,10 +6,8 @@ import { useOutletContext } from 'react-router-dom';
 function HomePageDefaultVideo({query}) {
  
   if(!query){
-    query="";
+     query="";
   }
-
- 
 
   const [videoList , setvideoList ] = useState([]);
  
@@ -29,7 +27,7 @@ function HomePageDefaultVideo({query}) {
    const videoslist = await videos.json();
 
   
-   setvideoList((prev)=>[...prev,...videoslist?.data]);
+   setvideoList(videoslist?.data);
    
    console.log(videoList)
  
@@ -51,7 +49,7 @@ function HomePageDefaultVideo({query}) {
 
 
 
-  },[])
+  },[query])
 
   
   return videoList.length==0?(

@@ -47,7 +47,7 @@ function Channel() {
 
   useEffect(()=>{
     fetchUserProfile()
-  },[])
+  },[userId])
 
   return (
     <div className="h-full w-full ">
@@ -56,7 +56,7 @@ function Channel() {
           <img
             src={userProfile?.coverImage}
             alt=""
-            className=""
+            className="object-fill h-full w-full"
           />
         </div>
         <div className="flex   justify-between flex-wrap mr-4 ">

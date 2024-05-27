@@ -47,7 +47,7 @@ function CardView({ data }) {
           <div>
             <p>{data.title}</p>
             <p>10.3k Views · 44 minutes ago </p>
-            <p>Code Master</p>
+            <p>{data.ownerDetails.username}</p>
           </div>
         </div>
       </div>

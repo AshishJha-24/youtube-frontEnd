@@ -8,6 +8,7 @@ import Channel from "./components/Channel.js";
 import Comment from "./components/Comment.js";
 import { VideosForProfile } from "./components/HomePageDefaultVideo.js";
 import Tweet from "./components/Tweet.js";
+import SearchVideoPage from "./components/SearchVideoPage.js";
 
 function App() {
 
@@ -18,6 +19,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />}>
         <Route path="/" element={<HomePageDefaultVideo/>}/>
+        <Route path="/results" element={<SearchVideoPage/>}/>
         <Route path="video/:videoId" element ={<VideoDetailedPage/>}/>
         <Route path="channel/:userId" element ={<Channel/>}>
           <Route path="/channel/:userId" element={< VideoofProfile /> }/>
