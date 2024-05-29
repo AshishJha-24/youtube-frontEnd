@@ -3,7 +3,7 @@ import logo from '../logo.jpeg'
 
 function EmptyVideoPage() {
   return (
-    <div className='min-h-screen w-full  sm:ml-72 ml-4 mr-4 flex items-center justify-center '>
+    <div className='w-full ml-4 mr-4 flex items-center justify-center '>
         <div>
         <div className=' flex justify-center m-4 '>
           <img className='w-20  rounded-full' src={logo} alt="" />

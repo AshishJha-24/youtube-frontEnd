@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import EmptyVideoPage from './EmptyVideoPage';
 import CardView from './CardView'
 import { useEffect } from 'react'
 import { useOutletContext } from 'react-router-dom';
@@ -8,6 +9,8 @@ function HomePageDefaultVideo({query}) {
   if(!query){
      query="";
   }
+  
+  const [loading, setLoading] = useState(true);
 
   const [videoList , setvideoList ] = useState([]);
  
@@ -46,25 +49,33 @@ function HomePageDefaultVideo({query}) {
   }catch(error){
     console.log("error while feteching videos "+ error)
   }
+  finally {
+    setLoading(false);
+  }
 
 
 
   },[query])
 
   
-  return videoList.length==0?(
-    <h1>Loading....</h1>
-  ):
-  (
- <>
-    { 
+  if (loading) {
+    return <h1>Loading ...</h1>;
+  }
+
+  if (videoList.length == 0) {
+    return <EmptyVideoPage />;
+  } else {
+    return (
+      <>
+       { 
      videoList.map((video)=><CardView key={video._id} data={video} />)    
     }
     
-
-   </>  
-  )
+      </>
+    );
+  }
 }
+
 
 
 export const VideosForProfile=(HomePageDefaultVideo)=>{

@@ -21,7 +21,7 @@ function Search() {
  },[])
 
   return (
-    <div className="flex sm:justify-between mt-2 mb-4 p-2 items-center fixed top-0 w-full z-10  bg-gray-900  border-2 border-white ">
+    <div className="flex sm:justify-between  mb-4 p-2 items-center fixed top-0 w-full z-10  bg-gray-900  border-2 border-white ">
       <div className="w-10  h-10">
         <img src={logo} alt="" />
       </div>

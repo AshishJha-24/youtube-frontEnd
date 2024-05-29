@@ -84,7 +84,7 @@ function Channel() {
         </div>
       </div>
 
-      <div className="border-2 border-white  mt-2">
+      <div className="border-2 border-white  mt-2 sticky top-24 z-10 bg-gray-50 dark:bg-gray-900  dark:text-white ">
         <ul className="flex justify-between ">
         {menuItems.map((item, index) => (
          
@@ -100,10 +100,12 @@ function Channel() {
         ))}
         </ul>
       </div>
+      <div>
       
       <Outlet context={{query:query,
                         userId:userId
       }} />
+      </div>
     </div>
   );
 }

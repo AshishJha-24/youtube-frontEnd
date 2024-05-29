@@ -2,8 +2,46 @@ import React from 'react'
 import { FaThumbsUp } from "react-icons/fa";
 import { FaThumbsDown } from "react-icons/fa";
 import { Link } from 'react-router-dom';
-function SingleComment({commentDetails}) {
+import { useState } from 'react';
+import timeAgo from '../utils/timeAgo';
+
+function SingleComment({commentDetails,toggleLike}) {
   console.log(commentDetails);
+  const defaultValue=commentDetails.isLiked?"text-blue-900":"";
+  const [isCommentLiked,setIsCommentLiked] =useState(defaultValue);
+  const [likeCount,setLikeCount]=useState(commentDetails.commentLikesCount || commentDetails.tweetLikeCount)
+  
+  const toggleLiked= async ({})=>{
+    const data =await fetch(toggleLike+commentDetails._id, 
+    {
+      method: "GET",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+    },
+});
+    const liked= await data.json();
+   if(liked.data.isLiked){
+    setLikeCount(likeCount+1)
+    
+    setIsCommentLiked("text-blue-900")
+    
+   }else{
+    setLikeCount(likeCount-1)
+    setIsCommentLiked("text-white")
+    
+   }
+
+  
+    console.log(liked);
+}
+
+    
+ 
+  const commentTime=timeAgo(commentDetails.createdAt);
+
+
   
   return (
     <div className=' mt-4'>
@@ -13,19 +51,19 @@ function SingleComment({commentDetails}) {
          </Link> 
         </div>
         <div className=''>
-            <p >{commentDetails?.commentOwner?.username || commentDetails?.tweetOwner?.username} . 4 sec ago </p>
+            <p >{commentDetails?.commentOwner?.username || commentDetails?.tweetOwner?.username} . {commentTime} </p>
             <p className='mt-1'>{commentDetails?.content}</p>
            
             <div className="flex  mt-2 ">
-              <div className="flex mr-4 cursor-pointer ">
-                {" "}
-                <FaThumbsUp className="text-2xl " />{" "}
-                <span className="ml-2 ">{commentDetails?.commentLikesCount || commentDetails?.tweetLikeCount}</span>
+              <div className="flex mr-4 cursor-pointer " onClick={toggleLiked}>
+                
+                <FaThumbsUp className={`${isCommentLiked} text-2xl` }/>
+                <span className="ml-2 ">{likeCount || commentDetails?.tweetLikeCount}</span>
               </div>
               <div className="flex mr-4 cursor-pointer ">
-                {" "}
-                <FaThumbsDown className="text-2xl" />{" "}
-                <span className="ml-2 ">222</span>
+                
+                <FaThumbsDown className="text-2xl" />
+                <span className="ml-2 "></span>
               </div>
              
             </div>

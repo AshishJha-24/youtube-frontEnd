@@ -1,13 +1,15 @@
 import React, { useEffect } from "react";
 import SingleComment from "./SingleComment";
 import { useState, useEffect } from "react";
-function Comment({ commentfetchApi, commentPostApi, heading, placeholder,visibilty }) {
+function Comment({ commentfetchApi, commentPostApi, heading, placeholder,visibilty, toggleLike }) {
   const [text, setText] = useState("");
   const [textareaHeight, setTextareaHeight] = useState("60px");
   const [submitvisbility, setSubmitvisibility] = useState("none");
 
   const [comments, setComments] = useState([]);
   const[newCommentVisibility ,setnewCommentVisibility]=useState(false)
+
+  
 
   const handleChange = (event) => {
     setText(event.target.value);
@@ -64,11 +66,16 @@ function Comment({ commentfetchApi, commentPostApi, heading, placeholder,visibil
   };
 
   useEffect(() => {
+
+    console.log("comment Fetched");
+
     fetchComments();
+    
+
   }, [newCommentVisibility]);
 
   return (
-    <div className="border-2 border-white p-4">
+    <div className="border-2 border-white p-4 rounded-2xl">
       <div className=" text-3xl">
         {comments.length} {heading}{" "}
       </div>
@@ -119,7 +126,7 @@ function Comment({ commentfetchApi, commentPostApi, heading, placeholder,visibil
       
 
       {comments.map((comment) => (
-        <SingleComment key={comment._id} commentDetails={comment} />
+        <SingleComment key={comment._id} commentDetails={comment} toggleLike={toggleLike} />
       ))}
     </div>
   );

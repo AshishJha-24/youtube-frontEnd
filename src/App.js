@@ -9,6 +9,8 @@ import Comment from "./components/Comment.js";
 import { VideosForProfile } from "./components/HomePageDefaultVideo.js";
 import Tweet from "./components/Tweet.js";
 import SearchVideoPage from "./components/SearchVideoPage.js";
+import LikedVideos from "./components/LikedVideos.js";
+import HistoryVideo from "./components/HistoryVideo.js";
 
 function App() {
 
@@ -20,6 +22,8 @@ function App() {
         <Route path="/" element={<HomePage />}>
         <Route path="/" element={<HomePageDefaultVideo/>}/>
         <Route path="/results" element={<SearchVideoPage/>}/>
+        <Route path="/liked-videos" element={<LikedVideos/>}/>
+        <Route path="/history" element={<HistoryVideo/>}/>
         <Route path="video/:videoId" element ={<VideoDetailedPage/>}/>
         <Route path="channel/:userId" element ={<Channel/>}>
           <Route path="/channel/:userId" element={< VideoofProfile /> }/>

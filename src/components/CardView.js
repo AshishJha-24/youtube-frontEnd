@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import timeAgo from "../utils/timeAgo";
 
 function CardView({ data }) {
   console.log(data);
@@ -22,6 +23,8 @@ function CardView({ data }) {
   
     duration+=Math.trunc(second);
 
+
+    const uploadedAgo = timeAgo(data.createdAt);
 
   return (
     <>
@@ -46,7 +49,7 @@ function CardView({ data }) {
           </div>
           <div>
             <p>{data.title}</p>
-            <p>10.3k Views · 44 minutes ago </p>
+            <p>{data.views} Views · {uploadedAgo} </p>
             <p>{data.ownerDetails.username}</p>
           </div>
         </div>
