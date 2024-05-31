@@ -12,7 +12,7 @@ import {Link} from "react-router-dom"
 
 function Sidebar() {
   return (
-    <div className='fixed flex flex-col justify-between m-2  border-2 border-white mt-24'>
+    <div className='fixed flex flex-col justify-between m-2  border-2 border-white mt-24 h-3/4'>
     <div className='flex flex-col m-2 text-lg  p-2 '>
 
      <Link to={"/"}>
@@ -49,10 +49,10 @@ function Sidebar() {
      </div>
      </Link>
 
-     <Link>
+     <Link to={"/subscription"}>
      <div className='flex  border-2 border-black p-2 hover:bg-orange-500 mt-3'>
       <div><ImUserCheck size={25} /></div>
-      <div className='sm:block hidden ml-4 font-semibold ' >Subscribers</div>
+      <div className='sm:block hidden ml-4 font-semibold ' >Subscriptions</div>
      </div>
      </Link>
 

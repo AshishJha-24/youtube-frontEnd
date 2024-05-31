@@ -11,6 +11,8 @@ import Tweet from "./components/Tweet.js";
 import SearchVideoPage from "./components/SearchVideoPage.js";
 import LikedVideos from "./components/LikedVideos.js";
 import HistoryVideo from "./components/HistoryVideo.js";
+import SubscribedList from "./components/SubscribedList.js";
+import SubscriberList from "./components/SubscriberList.js";
 
 function App() {
 
@@ -24,12 +26,13 @@ function App() {
         <Route path="/results" element={<SearchVideoPage/>}/>
         <Route path="/liked-videos" element={<LikedVideos/>}/>
         <Route path="/history" element={<HistoryVideo/>}/>
+        <Route path="/subscription" element={<SubscribedList/>}/>
         <Route path="video/:videoId" element ={<VideoDetailedPage/>}/>
         <Route path="channel/:userId" element ={<Channel/>}>
           <Route path="/channel/:userId" element={< VideoofProfile /> }/>
           <Route path="playlist" element={<HomePageDefaultVideo/> }/>
           <Route path="tweet" element={<TweetComponent/> }/>
-          <Route path="subscribed" element={<HomePageDefaultVideo/> }/>
+          <Route path="subscriber" element={<SubscriberList/> }/>
         </Route>
              
         </Route>

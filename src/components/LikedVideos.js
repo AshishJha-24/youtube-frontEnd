@@ -41,9 +41,7 @@ function LikedVideos() {
     return <h1>Loading ...</h1>;
   }
 
-  if (videoList.length == 0) {
-    return <EmptyVideoPage />;
-  } else {
+  if (videoList.length > 0) {
     return (
       <>
         {videoList.map((video) => (
@@ -51,6 +49,9 @@ function LikedVideos() {
         ))}
       </>
     );
+   
+  } else {
+    return <EmptyVideoPage />;
   }
 }
 

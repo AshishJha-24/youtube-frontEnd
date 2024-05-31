@@ -3,6 +3,7 @@ import { GoThumbsdown } from "react-icons/go";
 import { CiBookmarkPlus } from "react-icons/ci";
 import Comment from "./Comment";
 import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import timeAgo from "../utils/timeAgo";
@@ -13,13 +14,16 @@ export const VideoDetailedPage = () => {
   const [videoDetails, setVideoDetails] = useState({});
   const [videouploadedtime, setVideouploadedtime] = useState("")
   const [isVideoLiked,setIsVideoLiked] =useState("");
+  const [subscribeBtnStyle,setSubscribeBtnStyle]=useState({bgColor:"bg-red-900",text:"Subscribe"});
+  const[reloadAfterClickOnSubscribeBtn,setReloadAfterClickOnSubscribeBtn]=useState(true);
 
   const commentApi="http://localhost:8000/api/v1/comment/"+videoId;
   const toggleLikecommentApi="http://localhost:8000/api/v1/likes/toggle/c/";
 
 
   
- 
+  const data=   useSelector((state)=>state.user)
+  console.log(data);
 
 
   const toggleLiked= async ()=>{
@@ -56,6 +60,9 @@ export const VideoDetailedPage = () => {
       const video = await data.json();
 
       console.log(video?.data[0]);
+      if(video.data[0].isSubscribed){
+        setSubscribeBtnStyle({bgColor:"",text:"Subscribed"})
+      }
       const uploadedAgo = timeAgo(video?.data[0]?.createdAt);
       if(video?.data[0]?.isLiked){
         setIsVideoLiked("text-blue-900")
@@ -69,6 +76,32 @@ export const VideoDetailedPage = () => {
       console.log("Error in detailed video" + error);
     }
   };
+
+
+
+  const toggleSubscribe=async ()=>{
+    try {
+      const response = await fetch("http://localhost:8000/api/v1/subscriptions/c/"+videoDetails?.ownerDetails?._id,{
+        method:"POST",
+        credentials:"include",
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+      })
+      const subscriptionDetail=await response.json();
+      console.log(subscriptionDetail)
+      if(subscriptionDetail.data.subscribed){
+        setSubscribeBtnStyle({bgColor:"",text:"Subscribed"})
+      }else{
+        setSubscribeBtnStyle({bgColor:"bg-red-900",text:"Subscribe"})
+      }
+      setReloadAfterClickOnSubscribeBtn(!reloadAfterClickOnSubscribeBtn);
+     
+    } catch (error) {
+      console.log("error while subscribing channel"+error);
+    }
+  }
 
 
 
@@ -130,14 +163,15 @@ export const VideoDetailedPage = () => {
                 <p className="font-bold">
                   {videoDetails?.ownerDetails?.fullName}
                 </p>
-                <p className="text-gray ">757K Subscribers</p>
+                <p className="text-gray ">{videoDetails?.subscriberCount} Subscribers</p>
               </div>
             </div>
-            <div>
-            <button className="bg-red-900 w-24 rounded-md p-2 ">
-              Subscribe{" "}
+   {  data.user._id!==videoDetails?.ownerDetails?._id?(<div >
+            <button className={` ${subscribeBtnStyle.bgColor} w-24 rounded-md p-2 border-2 border-white `} onClick={toggleSubscribe}>
+            {subscribeBtnStyle.text}
             </button>
-            </div>
+            </div>):""
+               }
           </div>
 
           <div>

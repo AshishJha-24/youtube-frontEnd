@@ -1,8 +1,9 @@
 import React, { useEffect } from "react";
 import { Outlet, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { Outlet } from "react-router-dom";
+
 
 function Channel() {
 
@@ -10,14 +11,23 @@ function Channel() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [userProfile , setUserProfile] = useState({});
   const query = "?userId=" + userId;
+  const [subscribeBtnStyle,setSubscribeBtnStyle]=useState({bgColor:"bg-red-900",text:"Subscribe"});
+  const[reloadAfterClickOnSubscribeBtn,setReloadAfterClickOnSubscribeBtn]=useState(true);
+
+  const data=   useSelector((state)=>state.user)
+  console.log(data);
 
 
   const menuItems = [
     { name: "Video", path: "/channel/"+userId },
     { name: "Playlist", path: "playlist" },
     { name: "Tweet", path: "tweet" },
-    { name: "Subscribed", path: "subscribed"},
   ];
+
+  if(data.user._id===userId){
+    menuItems.push({name:"Subscribers",path:"subscriber"})
+  }
+  
 
   const handleClick = (index) => {
     setActiveIndex(index);
@@ -35,7 +45,14 @@ function Channel() {
       })
 
       const profile = await response.json();
+      console.log(profile.data);
+      if(profile.data.isSubscribed){
+        setSubscribeBtnStyle({bgColor:"",text:"Subscribed"})
+      }
       setUserProfile(profile.data);
+
+     
+
      
       console.log(userProfile);
       
@@ -45,9 +62,33 @@ function Channel() {
     }
   }
 
+  const toggleSubscribe=async ()=>{
+    try {
+      const response = await fetch("http://localhost:8000/api/v1/subscriptions/c/"+userId,{
+        method:"POST",
+        credentials:"include",
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+      })
+      const subscriptionDetail=await response.json();
+      console.log(subscriptionDetail)
+      if(subscriptionDetail.data.subscribed){
+        setSubscribeBtnStyle({bgColor:"",text:"Subscribed"})
+      }else{
+        setSubscribeBtnStyle({bgColor:"bg-red-900",text:"Subscribe"})
+      }
+      setReloadAfterClickOnSubscribeBtn(!reloadAfterClickOnSubscribeBtn);
+     
+    } catch (error) {
+      console.log("error while subscribing channel"+error);
+    }
+  }
+
   useEffect(()=>{
     fetchUserProfile()
-  },[userId])
+  },[userId,reloadAfterClickOnSubscribeBtn])
 
   return (
     <div className="h-full w-full ">
@@ -75,12 +116,13 @@ function Channel() {
               <p>{userProfile?.subscribersCount} Subscribers · {userProfile?.channelSubscribedToCount} Subscribed</p>
             </div>
           </div>
-
-          <div className="flex  justify-end   sm:w-1/5 h-16 md:mt-4">
-            <button className="bg-red-900 w-24 rounded-md p-2 ">
-              Subscribe{" "}
+{data.user._id!==userId?
+          (<div className="flex  justify-end   sm:w-1/5 h-16 md:mt-4 ">
+            <button className={ `${subscribeBtnStyle.bgColor} w-24 rounded-md p-2 border-2 border-white`} onClick={toggleSubscribe}>
+            {subscribeBtnStyle.text}
             </button>
-          </div>
+          </div>):""
+}
         </div>
       </div>
 
@@ -89,10 +131,10 @@ function Channel() {
         {menuItems.map((item, index) => (
          
             <Link to={item.path} key={index}
-              className={` ${activeIndex === index ? 'bg-orange-500' : ''} w-1/4 p-4 `}
+              className={` ${activeIndex === index ? 'bg-orange-500' : ''} w-full p-4 `}
               onClick={() => handleClick(index)}
             >
-               <li  className="cursor-pointer  ">
+               <li  className="cursor-pointer ">
               {item.name}
               </li>
             </Link>

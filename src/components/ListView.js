@@ -43,7 +43,7 @@ import timeAgo from "../utils/timeAgo";
         </div>
        
 
-        <div className=" w-full mt-5 mb-10 ">
+        <div className=" w-full mt-1  mb-4 md:border-0 border-2 rounded-xl border-white p-4 ">
         <p className="font-bold">{data.title}</p>
         <p className="pt-4 ">{data.views} Views · {uploadedAgo} </p> 
             <div className="flex items-center pt-4 ">
