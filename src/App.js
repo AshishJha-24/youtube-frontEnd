@@ -13,16 +13,59 @@ import LikedVideos from "./components/LikedVideos.js";
 import HistoryVideo from "./components/HistoryVideo.js";
 import SubscribedList from "./components/SubscribedList.js";
 import SubscriberList from "./components/SubscriberList.js";
+import Dashboard from "./components/Dashboard.js";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { updateStore } from "./store/userSlice.js";
+import { useNavigate } from "react-router-dom";
 
-function App() {
+
+function Root() {
 
   const VideoofProfile=VideosForProfile(HomePageDefaultVideo);
   const TweetComponent= Tweet(Comment);
+  const dispatcher=useDispatch();
+  const navigate = useNavigate();
+  const fetchUser= async()=>{
+      try {
+        const response = await fetch("http://localhost:8000/api/v1/users/current-user",{
+          credentials:"include",
+          headers:{
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+            }
+          }
+        })
+
+        console.log(response);
+
+        if(response.status===401){
+          navigate("/login")
+        }else{
+          const data = await response?.json();
+          dispatcher(updateStore(data.data));
+        }
+        
+
+       
+      } catch (error) {
+        console.log(error);
+       console.log("eror "+error);
+      }
+        
+      }
+        
+  
+  useEffect(()=>{
+    fetchUser();
+  },[])
   return (
-    <Router>
+   
       <Routes>
         <Route path="/" element={<HomePage />}>
         <Route path="/" element={<HomePageDefaultVideo/>}/>
+        <Route path="/user/dashboard" element={<Dashboard/>}/>
         <Route path="/results" element={<SearchVideoPage/>}/>
         <Route path="/liked-videos" element={<LikedVideos/>}/>
         <Route path="/history" element={<HistoryVideo/>}/>
@@ -40,8 +83,16 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
        
       </Routes>
-    </Router>
+   
   );
+}
+
+ function App(){
+  return (
+        <Router>
+          <Root/>
+        </Router>
+  )
 }
 
 export default App

@@ -30,9 +30,9 @@ function CardView({ data }) {
     <>
       <div className=" w-80 mt-4 ml-6 ">
         <Link to={"/video/" + data._id}>
-          <div className="border-2 border-white relative">
-            <img src={data.thumbnail} alt="" />
-            <p className="bg-black absolute bottom-0 right-0  text-white p-1  border-2 border-whie">
+          <div className="border-2 border-white relative w-80 h-80">
+            <img src={data.thumbnail} alt="" className="w-full h-full" />
+            <p className="bg-black absolute bottom-0 right-0  text-white p-1  border-2 border-white">
               {duration}
             </p>
           </div>

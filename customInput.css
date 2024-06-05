@@ -1,0 +1,13 @@
+.custom-file-input::file-selector-button {
+    --tw-bg-opacity: 1;
+    background-color: rgb(249 115 22 / var(--tw-bg-opacity));
+    font-weight: bold; 
+    padding: 0.5em;   
+    color:white;
+  }
+
+  .thin-border {
+    border-width: 1px; 
+    border-style: solid;
+    border-color: white; 
+  }

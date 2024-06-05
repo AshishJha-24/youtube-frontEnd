@@ -37,7 +37,7 @@ function Sidebar() {
      </Link>
 
 
-    <Link> <div className='flex  border-2 border-black p-2 hover:bg-orange-500 mt-3'>
+    <Link to={"/user/dashboard"}> <div className='flex  border-2 border-black p-2 hover:bg-orange-500 mt-3'>
       <div><FaVideo size={25} /></div>
       <div className='sm:block hidden ml-4 font-semibold '>My Content</div>
      </div>

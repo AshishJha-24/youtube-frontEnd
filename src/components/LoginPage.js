@@ -33,6 +33,8 @@ export default LoginPage = () => {
       });
 
       data = await add.json();
+
+      console.log(data);
       dispatch(login(data.data.user));
       
     } catch (errd) {
