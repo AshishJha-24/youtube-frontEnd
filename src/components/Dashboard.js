@@ -9,9 +9,10 @@ import { useState, useEffect } from "react";
 
 
 function Dashboard() {
-
     const [stats, setStats]=useState(null);
     const [videos, setVideos]=useState([]);
+    const [reload, setReload]=useState(false);
+    console.log(reload);
 
     const fetchStats=async()=>{
         try {
@@ -50,7 +51,7 @@ function Dashboard() {
     useEffect(()=>{
         fetchStats();
        
-    },[])
+    },[reload])
   return (
     <div className="w-full h-full  relative ">
       <div className="w-full  flex justify-between flex-wrap">
@@ -61,7 +62,7 @@ function Dashboard() {
           <p>Seamless Video Management, Elevated Results.</p>
         </div>
         <div>
-          <UploadVideo />
+          <UploadVideo setReload={setReload} />
         </div>
       </div>
       <div className="flex w-full mt-4 lg:flex-row flex-col">
@@ -107,7 +108,7 @@ function Dashboard() {
           </thead>
           <tbody>
 
-         {videos.map((video)=>(<SingleVideoForDashboard key ={video._id} details={video} />))}
+         {videos.map((video)=>(<SingleVideoForDashboard key ={video._id} details={video} setReload={setReload} />))}
          
          </tbody>
         </table>

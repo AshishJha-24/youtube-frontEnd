@@ -9,4 +9,10 @@
 .thin-border {
   border: 1px solid #fff;
 }
+
+.thin-line {
+  border-style: solid;
+  border-color: #fff;
+  border-bottom-width: 1px;
+}
 /*# sourceMappingURL=index.c41b5a0e.css.map */

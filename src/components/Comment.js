@@ -1,15 +1,17 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import SingleComment from "./SingleComment";
-import { useState, useEffect } from "react";
-function Comment({ commentfetchApi, commentPostApi, heading, placeholder,visibilty, toggleLike }) {
+import { useState, useEffect,useRef } from "react";
+import axios from "axios";
+import Spinner from "./Spinner"
+function Comment({ commentfetchApi, commentPostApi, heading, placeholder,visibilty, toggleLike,videoOwner,updateApi,deleteApi }) {
   const [text, setText] = useState("");
   const [textareaHeight, setTextareaHeight] = useState("60px");
   const [submitvisbility, setSubmitvisibility] = useState("none");
-
+  const [loading, setLoading]=useState(true);
   const [comments, setComments] = useState([]);
-  const[newCommentVisibility ,setnewCommentVisibility]=useState(false)
+  const [hasmoreData, sethasmoreData]=useState(true);
+  const [page, setPage] =  useState(1);
 
-  
 
   const handleChange = (event) => {
     setText(event.target.value);
@@ -20,22 +22,32 @@ function Comment({ commentfetchApi, commentPostApi, heading, placeholder,visibil
     }
   };
 
-  const fetchComments = async () => {
+  const fetchComments = async (pageNumber) => {
     try {
-      const data = await fetch(commentfetchApi, {
-        method: "GET",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-        },
-      });
-
-      const comments = await data.json();
-      setComments(comments?.data);
-      console.log(comments);
+     
+      const commentsData =await axios.get(commentfetchApi+`?page=${pageNumber}`,{
+        withCredentials:true
+      })
+      console.log(commentsData.data);
+      if(commentsData.data.data.length===0){
+        console.log("Data exhausted");
+        sethasmoreData(false);
+      }else if(page===1){
+        setComments(commentsData?.data.data);
+        sethasmoreData(true);
+      }else{
+        setComments((prev)=>[...prev,...commentsData?.data.data]);
+        sethasmoreData(true);
+        console.log(comments);
+      }
+      console.log(page);
+     
+      setPage(prev=> prev+1); 
+     
     } catch (error) {
       console.log("error while fetching comments" + error);
+    }finally{
+      setLoading(false);
     }
   };
 
@@ -54,27 +66,61 @@ function Comment({ commentfetchApi, commentPostApi, heading, placeholder,visibil
         });
 
         const newComment = await response.json();
-        console.log(newComment);
+       
+      console.log(newComment);
         setText("");
         setSubmitvisibility("none");
         setTextareaHeight("60px");
-        setnewCommentVisibility(!newCommentVisibility)
+        setPage(1)
       } catch (error) {
         console.log("failed to comment" + error);
       }
     }
   };
 
-  useEffect(() => {
-
-    console.log("comment Fetched");
-
-    fetchComments();
+  const handleIntersection =(entries) => {
+   
+    const target = entries[0];
+    console.log(hasmoreData);
+    console.log(page);
     
+    if (target.isIntersecting && hasmoreData) {
+      fetchComments(page); 
+    }else{
+      return;
+    }
+  };
 
-  }, [newCommentVisibility]);
+  
+
+  useEffect(() => {
+    console.log("page number::: "+page);
+    if(loading || page===1){
+      fetchComments(1);
+    }else{
+      const observer = new IntersectionObserver(handleIntersection,{
+        root: null, // Use the viewport as the root
+        rootMargin: '0px', // No margin
+        threshold: 1.0 // Fully visible
+      })
+      // Observe a target element (e.g., the last item in the list)
+      const targetElement = document.getElementById('intersection-target');
+      if (targetElement) {
+        observer.observe(targetElement);
+      }
+
+    
+    // Cleanup
+    return () => observer.disconnect(); 
+    }
+
+  }, [page]);
+
+
+
 
   return (
+    <>
     <div className="border-2 border-white p-4 rounded-2xl">
       <div className=" text-3xl">
         {comments.length} {heading}{" "}
@@ -126,9 +172,14 @@ function Comment({ commentfetchApi, commentPostApi, heading, placeholder,visibil
       
 
       {comments.map((comment) => (
-        <SingleComment key={comment._id} commentDetails={comment} toggleLike={toggleLike} />
+        <SingleComment key={comment._id} commentDetails={comment} toggleLike={toggleLike} videoOwner={videoOwner} setPage={setPage} updateApi={updateApi} deleteApi={deleteApi} />
       ))}
+       <div id="intersection-target" style={{ height: '10px' }} className="flex justify-center m-4 "> {hasmoreData?<Spinner/>:(<h1>{comments.length===0?<span>Write first Comment </span>:<span> No more Comment</span> }</h1>)}  </div> {/* Target element for intersection observer */}
     </div>
+  
+    
+
+    </>
   );
 }
 

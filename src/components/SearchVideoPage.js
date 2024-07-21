@@ -14,7 +14,8 @@ function SearchVideoPage() {
 
     const [videoList , setvideoList ] = useState([]);
     const fetchVideos  = async () =>{
-
+    
+      try{
         const videos = await fetch("http://localhost:8000/api/v1/video?query="+queryParams.get("query"), {
           method: "GET",
           credentials: "include",
@@ -31,27 +32,23 @@ function SearchVideoPage() {
         setvideoList(videoslist?.data);
         
         console.log(videoList)
-      
-     
-      }
-      useEffect(  ()=>{
-        try{
-         fetchVideos()
-        
-         console.log(videoList)
-         
-         }catch(error){
+
+          }catch(error){
            console.log("error while feteching videos "+ error)
          } finally {
           setLoading(false);
         }
-       
-       
+      
+     
+      }
+      useEffect(  ()=>{
+
+         fetchVideos()
        
          },[videoList])
 
 
-         if (loading) {
+        if (loading) {
           return <h1>Loading ...</h1>;
         }
       
@@ -63,6 +60,7 @@ function SearchVideoPage() {
               { 
              videoList.map((video)=><ListView key={video._id} data={video} />)    
             }
+           
             </>
           );
         }

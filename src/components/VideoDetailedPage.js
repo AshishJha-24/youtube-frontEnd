@@ -19,6 +19,8 @@ export const VideoDetailedPage = () => {
 
   const commentApi="http://localhost:8000/api/v1/comment/"+videoId;
   const toggleLikecommentApi="http://localhost:8000/api/v1/likes/toggle/c/";
+  const commentUpdateApi="http://localhost:8000/api/v1/comment/c/";
+  const commentDeleteApi="http://localhost:8000/api/v1/comment/c/"
 
 
   
@@ -109,7 +111,7 @@ export const VideoDetailedPage = () => {
     fetchVideo();
      
      
-  }, [isVideoLiked]);
+  }, [isVideoLiked,reloadAfterClickOnSubscribeBtn]);
   return !videoDetails ? (
     <>
       <h1>Loading.....</h1>
@@ -182,7 +184,7 @@ export const VideoDetailedPage = () => {
           </div>
        
        </div>
-      <Comment commentfetchApi={commentApi}  commentPostApi={commentApi} heading={"Comment"} placeholder={"Add a comment...."} visibilty="block" toggleLike={toggleLikecommentApi}/>
+      <Comment commentfetchApi={commentApi}  commentPostApi={commentApi} heading={"Comment"} placeholder={"Add a comment...."} visibilty="block" toggleLike={toggleLikecommentApi} videoOwner={videoDetails?.ownerDetails?._id} updateApi={commentUpdateApi} deleteApi={commentDeleteApi}/>
       
       </div>
     </>

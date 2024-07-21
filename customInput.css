@@ -11,3 +11,8 @@
     border-style: solid;
     border-color: white; 
   }
+  .thin-line{
+    border-bottom: 1px;
+    border-style: solid;
+    border-color: white;
+  }

@@ -3,31 +3,36 @@ import EmptyVideoPage from "./EmptyVideoPage";
 import CardView from "./CardView";
 import { useEffect } from "react";
 import { useOutletContext } from "react-router-dom";
+import axios from "axios";
+import Spinner from "./Spinner";
 
 function HomePageDefaultVideo({ query }) {
-  if (!query) {
-    query = "";
-  }
+ 
 
   const [loading, setLoading] = useState(true);
-
+  const [page, setPage] = useState(1);
   const [videoList, setvideoList] = useState([]);
-
+  const [hasmoreData, sethasmoreData]=useState(true);
+  
+  if (!query) {
+    query =`?page=${page}`;
+  }else{
+    query+=`&page=${page}`
+  }
+  
   const fetchVideos = async () => {
+    
     try {
-      const videos = await fetch("http://localhost:8000/api/v1/video" + query, {
-        method: "GET",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-        },
-      });
 
-      const videoslist = await videos.json();
-
-      setvideoList(videoslist?.data);
-
+      const videos = await axios.get("http://localhost:8000/api/v1/video"+query,{
+        withCredentials:true,
+      })
+  
+    if(videos.data.data.length===0){
+      sethasmoreData(false);
+    }
+      setvideoList((prev)=>[...prev,...videos?.data.data]);
+      setPage(prevPage => prevPage + 1);
       console.log(videoList);
     } catch (error) {
       console.log("error while feteching videos " + error);
@@ -36,8 +41,35 @@ function HomePageDefaultVideo({ query }) {
     }
   };
 
+  const handleIntersection = (entries) => {
+    const target = entries[0];
+    console.log("hello world")
+    if (target.isIntersecting && hasmoreData) {
+      fetchVideos(); // Fetch more data when the target element becomes visible
+    }
+  };
+
   useEffect(() => {
-    fetchVideos();
+    if(loading){
+      fetchVideos();
+    }else{
+// Create intersection observer
+const observer = new IntersectionObserver(handleIntersection, {
+  root: null, // Use the viewport as the root
+  rootMargin: '0px', // No margin
+  threshold: 1.0 // Fully visible
+});
+
+// Observe a target element (e.g., the last item in the list)
+const targetElement = document.getElementById('intersection-target');
+if (targetElement) {
+  observer.observe(targetElement);
+}
+
+// Cleanup
+return () => observer.disconnect();
+    }
+      
   }, [query]);
 
   if (loading) {
@@ -52,6 +84,9 @@ function HomePageDefaultVideo({ query }) {
         {videoList.map((video) => (
           <CardView key={video._id} data={video} />
         ))}
+
+<div id="intersection-target" style={{ height: '10px' }} className="m-8  flex w-full justify-center  "> {hasmoreData?<Spinner/>:(<h1>No more Data </h1>) }</div> {/* Target element for intersection observer */}
+{loading && <p>Loading...</p>}
       </>
     );
   }

@@ -1,13 +1,20 @@
 import downloadIcon from "../downloadImg.jpeg";
 import custominput from "../../customInput.css";
-import { useState,useRef } from "react";
+import { useState,useRef,useEffect } from "react";
+import axios from "axios"
+import VideoUploadingStatuus from "./VideoUploadingStatuus";
 
-const VideoUploadPopUp = ({ closeModal }) => {
+const VideoUploadPopUp = ({ closeModal ,setReload}) => {
     const fileInputRef = useRef(null);
     const [video, setVideo] = useState("");
     const [videoShow, setvideoShow] = useState("hidden");
     const [hideText, setHideText] = useState("");
     const [textareaHeight, setTextareaHeight] = useState("200px");
+    const [uploadingStart,setUploadingStart]=useState(false);
+    const [progressComplete, setProgressComplete] = useState("uploading video.....");
+    const [size,setSize]=useState(0);
+    const abortControllerRef = useRef(null);
+    
 
     const [formDetails,setFormDetails]=useState({video:"",thumbnail:"",title:"",description:"",isPublished:"false"});
 
@@ -24,6 +31,8 @@ const VideoUploadPopUp = ({ closeModal }) => {
     const handleButtonClick = () => {
       fileInputRef.current.click();
     };
+
+  
   
     const handleFileChange = (event) => {
         const {name}=event.target;
@@ -35,9 +44,11 @@ const VideoUploadPopUp = ({ closeModal }) => {
         
    if(name==="video"){
     const videoURL = URL.createObjectURL(file);
+    setSize(file.size);
     setvideoShow("");
     setHideText("hidden");
     setVideo(videoURL);
+   
    }
        
       }
@@ -58,7 +69,6 @@ const VideoUploadPopUp = ({ closeModal }) => {
       console.log(formDetails)
     };
 
-let controller;
 const uploadVideo=async ()=>{
     console.log("upload Button Clicked")
     const formData= new FormData();
@@ -67,37 +77,48 @@ const uploadVideo=async ()=>{
             formData.append(key, formDetails[key]);
           }
     }
+    
     try {
 
-         controller = new AbortController();
-        const signal=controller.signal;
-        const response = await fetch("http://localhost:8000/api/v1/video",{
-            method: 'POST',
-            body: formData,
-            credentials:"include",
-            signal
-          
-        })
-
-        const data = await response.json();
-        console.log(data);
-        closeModal();
+      const CancelToken = axios.CancelToken;
+      abortControllerRef.current = CancelToken.source();
+      setUploadingStart(true);
+      const response = await axios.post("http://localhost:8000/api/v1/video", formData, {
+        withCredentials: true,
+        cancelToken: abortControllerRef.current.token,
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        }
+      });
+        
+      setProgressComplete("Uploaded Successfully ")
+       
+        console.log(response.data);
+        
 
     
   } catch (error) {
-    if(error.name='AbortError'){
-        console.log("video uploading canceled"+error)
+    if (axios.isCancel(error)) {
+      console.log("Video uploading canceled: " + error.message);
+    } else {
+      console.error("Error while uploading video: " + error.message);
+      setProgressComplete("Server error while uploading Video")
     }
-    console.log("error while uploading video ::"+error);
-  }
 }
 
 
 
+}
+
   
     return (
-      <div className="sm:inset-0 top-12 border-green-500 flex justify-center items-center z-50 absolute">
-        <div className="p-4 rounded-lg border-2 border-white shadow-lg  bg-gray-50 dark:bg-gray-900  dark:text-white md:w-1/2 md:h-full w-full overflow-auto ">
+      <div className="sm:inset-0 top-12 h-full  w-full flex justify-center items-center z-50 absolute  " onClick={(e)=>{
+        closeModal();
+      }}>
+       {!uploadingStart&& <div className="p-4 rounded-lg border-2 border-white shadow-lg  bg-gray-50 dark:bg-gray-900  dark:text-white md:w-1/2 md:h-full h-full w-full overflow-auto " onClick={(e)=>{
+                e.stopPropagation();
+       }}>
+         <div>
           <div className="flex border-b-2 border-white justify-between p-2 items-center b">
             <div>
               <p className="text-3xl">Upload Video</p>
@@ -201,17 +222,17 @@ const uploadVideo=async ()=>{
           <button
             onClick={()=>{
                 console.log("Cancel button clicked")
-                if(controller){
-                    controller.abort();
-                }
                 closeModal();
             }}
             className="btn btn-secondary bg-orange-500 px-4 py-2 mt-2"
           >
             Cancel
           </button>
-          <div></div>
+          </div>
         </div>
+}
+
+{uploadingStart&&(<VideoUploadingStatuus  progressComplete={progressComplete} closeModal={closeModal} abortControllerRef={abortControllerRef} size={size} setReload={setReload}/>)}
       </div>
     );
   };

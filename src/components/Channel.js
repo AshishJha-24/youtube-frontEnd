@@ -4,6 +4,8 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 
+import dname from "../utils/apidomainName";
+
 
 function Channel() {
 
@@ -16,7 +18,7 @@ function Channel() {
 
   const data=   useSelector((state)=>state.user)
   console.log(data);
-
+console.log(dname)
 
   const menuItems = [
     { name: "Video", path: "/channel/"+userId },
@@ -35,7 +37,7 @@ function Channel() {
 
   const fetchUserProfile = async()=>{
     try {
-      const response = await fetch("http://localhost:8000/api/v1/users/c/"+userId,{
+      const response = await fetch(dname+"/api/v1/users/c/"+userId,{
         method:"GET",
         credentials:"include",
         headers: {

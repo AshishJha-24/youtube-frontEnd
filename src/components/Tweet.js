@@ -6,8 +6,10 @@ const Tweet = (Comment)=>{
     return(props)=>{
          const data= useOutletContext();
          tweetfetchApi="http://localhost:8000/api/v1/tweets/user/"+data.userId;
-         tweetPostApi="http://localhost:8000/api/v1/tweets"
+         tweetPostApi="http://localhost:8000/api/v1/tweets";
          toggletweetLike="http://localhost:8000/api/v1/likes/toggle/t/";
+         tweetUpdateApi="http://localhost:8000/api/v1/tweets/";
+         tweetDeleteApi="http://localhost:8000/api/v1/tweets/";
 
          const Currentuser=useSelector((state)=>state.user)
          console.log(Currentuser)
@@ -20,7 +22,10 @@ const Tweet = (Comment)=>{
          }
 
         return(
-            <Comment commentfetchApi={tweetfetchApi} commentPostApi={tweetPostApi}  placeholder={"Add a tweet...."} heading={"Tweets"} visibilty={visibiltyoftweetBox} toggleLike={toggletweetLike} />
+            <Comment commentfetchApi={tweetfetchApi} commentPostApi={tweetPostApi}  placeholder={"Add a tweet...."} heading={"Tweets"} visibilty={visibiltyoftweetBox} toggleLike={toggletweetLike}
+            updateApi={tweetUpdateApi}
+            deleteApi={tweetDeleteApi}
+             />
         )
     }
 }

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import VideoUploadPopUp from "./VideoUploadPopUp";
 
 
-const UploadVideo = () => {
+const UploadVideo = ({setReload}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
@@ -16,7 +16,7 @@ const UploadVideo = () => {
         >
           + Upload Video
         </button>
-        {isModalOpen && <VideoUploadPopUp closeModal={closeModal} />}
+        {isModalOpen && <VideoUploadPopUp closeModal={closeModal} setReload={setReload}/>}
       </div>
     </>
   );
