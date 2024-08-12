@@ -35,7 +35,11 @@ function HomePageDefaultVideo({ query }) {
       setPage(prevPage => prevPage + 1);
       console.log(videoList);
     } catch (error) {
-      console.log("error while feteching videos " + error);
+      console.log("error while feteching videos " , {
+        message: error.message,
+        response: error.response?.data,
+        config: error.config,
+      });
     } finally {
       setLoading(false);
     }
