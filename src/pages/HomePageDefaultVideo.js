@@ -24,9 +24,10 @@ function HomePageDefaultVideo({ query }) {
     
     try {
 
-      const videos = await axios.get(process.env.API_ENTRYPOINT+"/api/v1/video"+query,{
+      const videos = await axios.get(`${process.env.API_ENTRYPOINT}+/api/v1/video${query}`,{
         withCredentials:true,
       })
+      console.log(videos);
   
     if(videos.data.data.length===0){
       sethasmoreData(false);
@@ -47,7 +48,6 @@ function HomePageDefaultVideo({ query }) {
 
   const handleIntersection = (entries) => {
     const target = entries[0];
-    console.log("hello world")
     if (target.isIntersecting && hasmoreData) {
       fetchVideos(); // Fetch more data when the target element becomes visible
     }
