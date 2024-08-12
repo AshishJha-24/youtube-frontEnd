@@ -83,7 +83,7 @@ const uploadVideo=async ()=>{
       const CancelToken = axios.CancelToken;
       abortControllerRef.current = CancelToken.source();
       setUploadingStart(true);
-      const response = await axios.post("http://localhost:8000/api/v1/video", formData, {
+      const response = await axios.post(process.env.API_ENTRYPOINT+"/api/v1/video", formData, {
         withCredentials: true,
         cancelToken: abortControllerRef.current.token,
         headers: {

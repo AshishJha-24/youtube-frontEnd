@@ -13,7 +13,7 @@ function SubscriberList() {
   const fetchSubscriber = async () => {
     try {
       const response = await fetch(
-        "http://localhost:8000/api/v1/subscriptions/c/"+userId,
+        process.env.API_ENTRYPOINT+"/api/v1/subscriptions/c/"+userId,
         {
           method: "GET",
           credentials: "include",

@@ -6,7 +6,7 @@ const ToggleButton = ({ispublished,setIsOn,isOn,videoId}) => {
 
     const togglePublishVideo=async()=>{
         try {
-            const response = await fetch("http://localhost:8000/api/v1/video/toggle/publish/"+videoId,{
+            const response = await fetch(process.env.API_ENTRYPOINT+"/api/v1/video/toggle/publish/"+videoId,{
                 method:"PATCH",
                 credentials:"include",
                 headers:{

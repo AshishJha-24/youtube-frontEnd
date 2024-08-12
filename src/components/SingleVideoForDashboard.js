@@ -23,7 +23,7 @@ function SingleVideoForDashboard({details,setReload}) {
   const deleteVideo = async ()=>{
     setShowSpinner(true);
     try {
-    const response=  await axios.delete(`http://localhost:8000/api/v1/video/${_id}`,{
+    const response=  await axios.delete(`${process.env.API_ENTRYPOINT}/api/v1/video/${_id}`,{
       withCredentials: true,
     });
      console.log(response);

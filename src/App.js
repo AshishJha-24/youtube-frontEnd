@@ -1,23 +1,24 @@
-import HomePage from "./components/HomePage";
-import LoginPage from "./components/LoginPage";
-import Registration from "./components/Registration"
+import HomePage from "./pages/HomePage.js";
+import LoginPage from "./pages/LoginPage.js";
+import Registration from "./pages/Registration.js"
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { VideoDetailedPage } from "./components/VideoDetailedPage";
-import HomePageDefaultVideo from "./components/HomePageDefaultVideo.js";
-import Channel from "./components/Channel.js";
+import { VideoDetailedPage } from "./pages/VideoDetailedPage";
+import HomePageDefaultVideo from "./pages/HomePageDefaultVideo.js";
+import Channel from "./pages/Channel.js";
 import Comment from "./components/Comment.js";
-import { VideosForProfile } from "./components/HomePageDefaultVideo.js";
+import { VideosForProfile } from "./pages/HomePageDefaultVideo.js";
 import Tweet from "./components/Tweet.js";
-import SearchVideoPage from "./components/SearchVideoPage.js";
-import LikedVideos from "./components/LikedVideos.js";
-import HistoryVideo from "./components/HistoryVideo.js";
-import SubscribedList from "./components/SubscribedList.js";
+import SearchVideoPage from "./pages/SearchVideoPage.js";
+import LikedVideos from "./pages/LikedVideos.js";
+import HistoryVideo from "./pages/HistoryVideo.js";
+import SubscribedList from "./pages/SubscribedList.js";
 import SubscriberList from "./components/SubscriberList.js";
-import Dashboard from "./components/Dashboard.js";
+import Dashboard from "./pages/Dashboard.js";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { updateStore } from "./store/userSlice.js";
 import { useNavigate } from "react-router-dom";
+import 'dotenv/config'
 
 
 function Root() {
@@ -28,7 +29,7 @@ function Root() {
   const navigate = useNavigate();
   const fetchUser= async()=>{
       try {
-        const response = await fetch("http://localhost:8000/api/v1/users/current-user",{
+        const response = await fetch(process.env.API_ENTRYPOINT+"/api/v1/users/current-user",{
           credentials:"include",
           headers:{
             headers: {
