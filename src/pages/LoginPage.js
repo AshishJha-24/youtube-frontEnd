@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { login } from "../store/userSlice";
 
-export default LoginPage = () => {
+const LoginPage = () => {
     const [loginInfo, setloginInfo] = useState({ username: "", password: "" });
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -153,3 +153,5 @@ export default LoginPage = () => {
     </>
   );
 };
+
+export default LoginPage;
