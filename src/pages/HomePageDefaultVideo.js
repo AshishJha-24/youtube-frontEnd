@@ -25,6 +25,7 @@ function HomePageDefaultVideo({ query }) {
     try {
 
       const videos = await axios.get(`${process.env.API_ENTRYPOINT}/api/v1/video${query}`,{
+        timeout: 20000, // Set a timeout of 5 seconds
         withCredentials:true,
       })
       console.log(videos);
