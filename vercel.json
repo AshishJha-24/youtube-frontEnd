@@ -3,10 +3,6 @@
     "builds": [
       { "src": "package.json", "use": "@vercel/static-build" }
     ],
-    "routes": [
-      { "src": "/static/(.*)", "dest": "/static/$1" },
-      { "src": "/favicon.ico", "dest": "/favicon.ico" },
-      { "src": "/(.*)", "dest": "/src/index.html" }
-    ]
+    "routes": [{ "src": "/[^.]+", "dest": "/", "status": 200 }]
   }
   
