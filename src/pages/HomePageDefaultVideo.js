@@ -24,7 +24,7 @@ function HomePageDefaultVideo({ query }) {
     
     try {
 
-      const videos = await axios.get(process.env.API_ENTRYPOINT+"/api/v1/video"+query,{
+      const videos = await axios.get(`${process.env.API_ENTRYPOINT}/api/v1/video${query}`,{
         withCredentials:true,
       })
   
