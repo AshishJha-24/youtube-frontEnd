@@ -7,12 +7,12 @@ const Tweet = (Comment)=>{
          const data= useOutletContext();
          console.log(data);
          console.log(process.env.API_ENTRYPOINT)
-         tweetfetchApi=process.env.API_ENTRYPOINT+"/api/v1/tweets/user/"+data.userId;
+        const tweetfetchApi=process.env.API_ENTRYPOINT+"/api/v1/tweets/user/"+data.userId;
          console.log(tweetfetchApi)
-         tweetPostApi=process.env.API_ENTRYPOINT+"/api/v1/tweets";
-         toggletweetLike=process.env.API_ENTRYPOINT+"/api/v1/likes/toggle/t/";
-         tweetUpdateApi=process.env.API_ENTRYPOINT+"/api/v1/tweets/";
-         tweetDeleteApi=process.env.API_ENTRYPOINT+"/api/v1/tweets/";
+        const tweetPostApi=process.env.API_ENTRYPOINT+"/api/v1/tweets";
+        const toggletweetLike=process.env.API_ENTRYPOINT+"/api/v1/likes/toggle/t/";
+        const tweetUpdateApi=process.env.API_ENTRYPOINT+"/api/v1/tweets/";
+        const tweetDeleteApi=process.env.API_ENTRYPOINT+"/api/v1/tweets/";
 
          const Currentuser=useSelector((state)=>state.user)
    
