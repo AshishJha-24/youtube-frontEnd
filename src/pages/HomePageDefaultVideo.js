@@ -20,31 +20,31 @@ function HomePageDefaultVideo({ query }) {
     query+=`&page=${page}`
   }
   
-  const fetchVideos = async () => {
-    
-    try {
-
-      const videos = await axios.get(`${process.env.API_ENTRYPOINT}/api/v1/video${query}`,{
-        timeout: 20000, // Set a timeout of 5 seconds
-        withCredentials:true,
-      })
+  function fetchVideos(){
+    return axios.get(`${process.env.API_ENTRYPOINT}/api/v1/video${query}`, {
+      timeout: 20000,
+      withCredentials: true,
+  })
+  .then(videos => {
       console.log(videos);
-  
-    if(videos.data.data.length===0){
-      sethasmoreData(false);
-    }
-      setvideoList((prev)=>[...prev,...videos?.data.data]);
+
+      if (videos.data.data.length === 0) {
+          sethasmoreData(false);
+      }
+      setvideoList(prev => [...prev, ...videos?.data.data]);
       setPage(prevPage => prevPage + 1);
       console.log(videoList);
-    } catch (error) {
-      console.log("error while feteching videos " , {
-        message: error.message,
-        response: error.response?.data,
-        config: error.config,
-      });
-    } finally {
-      setLoading(false);
-    }
+    })
+    .catch(error => {
+        console.log("error while fetching videos", {
+            message: error.message,
+            response: error.response?.data,
+            config: error.config,
+        });
+    })
+    .finally(() => {
+        setLoading(false);
+    });
   };
 
   const handleIntersection = (entries) => {
