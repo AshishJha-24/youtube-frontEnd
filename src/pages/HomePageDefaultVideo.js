@@ -21,7 +21,7 @@ function HomePageDefaultVideo({ query }) {
   }
   
   function fetchVideos(){
-    console.log("calling me")
+    
     return axios.get(`${process.env.API_ENTRYPOINT}/api/v1/video${query}`, {
       timeout: 20000,
       withCredentials: true,
